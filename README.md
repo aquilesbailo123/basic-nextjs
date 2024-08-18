@@ -1,6 +1,6 @@
 # Next.js Application Template
 
-Welcome to your Next.js Application Template! This repository provides a comprehensive starting point for building modern web applications with Next.js, featuring integrations with Tailwind CSS, NextAuth, NextUI, and Leaflet. The template includes useful utilities for managing environment variables and decoding Google Cloud JSON files.
+Welcome to your Next.js Application Template! This repository provides a comprehensive starting point for building modern web applications with Next.js, featuring integrations with Tailwind CSS, NextAuth, NextUI, Leaflet, and several pre-configured API endpoints for interacting with a PostgreSQL database.
 
 ## Table of Contents
 
@@ -17,6 +17,7 @@ Welcome to your Next.js Application Template! This repository provides a compreh
     - [NextAuth Authentication](#nextauth-authentication)
     - [NextUI Integration](#nextui-integration)
     - [Leaflet Map Integration](#leaflet-map-integration)
+    - [API Endpoints](#api-endpoints)
     - [Python Utilities](#python-utilities)
     - [Custom Pages and Components](#custom-pages-and-components)
   - [Running the Application](#running-the-application)
@@ -30,6 +31,7 @@ Welcome to your Next.js Application Template! This repository provides a compreh
 - **NextAuth**: Full-featured authentication for Next.js applications.
 - **NextUI**: Modern, beautiful, and fully customizable UI components for React.
 - **Leaflet**: Interactive map integration for your application.
+- **Pre-configured API Endpoints**: Ready-to-use endpoints for interacting with a PostgreSQL database.
 - **Python Utilities**: Handy scripts for generating secure secrets and decoding Google Cloud credentials.
 - **Pre-configured Pages**: Ready-to-use Home and User pages, along with Navbar and Footer components.
 - **Easy Customization**: Manage constants like page titles, social media links, and more in `src/utils/constants.js`.
@@ -51,7 +53,7 @@ Clone the repository and set up your environment by following these steps:
 
 ```bash
 git clone https://github.com/aquilesbailo123/basic-nextjs ./
-copy .env.local.template .env.local
+rename .env.local.template .env.local
 npm install
 npm run dev
 ```
@@ -103,7 +105,15 @@ Here’s an overview of the project structure:
 │   │   ├── gcs.js
 │   │   └── multer.js
 │   ├── pages/
-│   │   ├── api/auth/
+│   │   ├── api/
+│   │   │   ├── auth/
+│   │   │   │   ├── [...nextauth].js
+│   │   │   ├── deleteImage.js
+│   │   │   ├── get.js
+│   │   │   ├── post.js
+│   │   │   ├── postForm.js
+│   │   │   ├── postFormImage.js
+│   │   │   └── putFormImage.js
 │   │   ├── home.js
 │   │   ├── user.js
 │   ├── styles/
@@ -123,28 +133,6 @@ Here’s an overview of the project structure:
 
 - **Description**: Tailwind CSS is a utility-first CSS framework that allows you to build custom designs without leaving your HTML. This project is pre-configured with Tailwind CSS, providing a robust foundation for styling your application.
 - **Configuration**: The Tailwind CSS configuration is located in `tailwind.config.js`. It is extended with NextUI integration for enhanced theme customization.
-
-  ```javascript
-  import { nextui } from "@nextui-org/react";
-  
-  module.exports = {
-    content: [
-      "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
-      "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
-      "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
-      "./node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}"
-    ],
-    theme: {
-      extend: {
-        fontFamily: {
-          poppins: ['Poppins', 'sans-serif'],
-          work: ['Work Sans', 'sans-serif'],
-        },
-      },
-    },
-    plugins: [nextui({ defaultTheme: "light" })],
-  };
-  ```
 
 - **Documentation**: [Tailwind CSS Documentation](https://tailwindcss.com/docs).
 
@@ -181,18 +169,40 @@ Here’s an overview of the project structure:
 
 - **Documentation**: [Leaflet Documentation](https://leafletjs.com/).
 
+### API Endpoints
+
+This template includes several pre-configured API endpoints to interact with a PostgreSQL database. These endpoints are located in `src/pages/api/` and include basic CRUD (Create, Read, Update, Delete) operations:
+
+- **GET `/api/get`**:
+  - Retrieves records from the database.
+  - Requires a valid JWT token for authorization.
+  
+- **POST `/api/post`**:
+  - Adds a new record to the database.
+  - Requires a valid JWT token for authorization.
+  
+- **POST `/api/postForm`**:
+  - Adds a new record to the database using form data.
+  - Requires a valid JWT token for authorization.
+
+- **POST `/api/postFormImage`**:
+  - Adds a new record to the database, including an image file upload.
+  - Requires a valid JWT token for authorization.
+
+- **PUT `/api/putFormImage`**:
+  - Updates an existing record in the database, optionally replacing the associated image.
+  - Requires a valid JWT token for authorization.
+
+- **DELETE `/api/deleteImage`**:
+  - Deletes a record from the database and removes the associated image from Google Cloud Storage.
+  - Requires a valid JWT token for authorization.
+
+These endpoints leverage the `next-auth` package for JWT-based authentication and include database interactions using `pg` for PostgreSQL. File uploads are handled via `multer`, and image management is integrated with Google Cloud Storage.
+
 ### Python Utilities
 
 - **encode_json.py**: This script is used to encode your Google Cloud JSON credentials, making it easier to manage them in your application.
 - **generate_secrets.py**: A utility to generate random strings used as secrets in environment variables. Use this script to generate `NEXTAUTH_SECRET`, `VERCEL`, and other sensitive keys.
-
-  Example usage:
-
-  ```bash
-  python3 generate_secrets.py
-  ```
-
-  This will print a random string that can be used for secure environment variables.
 
 ### Custom Pages and Components
 
@@ -202,7 +212,9 @@ Here’s an overview of the project structure:
 
 - **Reusable Components**:
   - **Navbar and Footer**: Located in `src/components/`, these components are designed to be reusable across different pages.
-  - **Constants**: All constants like page titles, social media links, and more can be managed in `src/utils/constants.js`.
+  - **Constants**: All constants like page titles,
+
+ social media links, and more can be managed in `src/utils/constants.js`.
 
 - **Global Styles**:
   - Global styles are handled in `src/styles/globals.css`, which includes Tailwind's base styles and customizations.
