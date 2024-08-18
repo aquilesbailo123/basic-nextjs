@@ -53,7 +53,7 @@ Clone the repository and set up your environment by following these steps:
 
 ```bash
 git clone https://github.com/aquilesbailo123/basic-nextjs ./
-rename .env.local.template .env.local
+copy .env.local.template .env.local
 npm install
 npm run dev
 ```
